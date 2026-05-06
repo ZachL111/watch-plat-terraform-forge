@@ -1,0 +1,73 @@
+{
+  "repo": "watch-plat-terraform-forge",
+  "language": "Java",
+  "category": "Platform engineering",
+  "goal": "Package a Java local lab for terraform analysis with round-trip fixtures, lossless normalization checks, and documented operating limits.",
+  "review_model": {
+    "terms": [
+      "rollout width",
+      "quota pressure",
+      "route drift",
+      "secret scope"
+    ],
+    "lanes": [
+      "ship",
+      "watch",
+      "hold"
+    ],
+    "score": "signal * 2 + slack + confidence - drag * 3",
+    "purpose": "surface the domain-specific cases that need the most careful review"
+  },
+  "cases": [
+    {
+      "name": "baseline",
+      "focus": "rollout width",
+      "signal": 59,
+      "slack": 41,
+      "drag": 17,
+      "confidence": 63,
+      "score": 171,
+      "lane": "ship"
+    },
+    {
+      "name": "stress",
+      "focus": "quota pressure",
+      "signal": 60,
+      "slack": 34,
+      "drag": 20,
+      "confidence": 74,
+      "score": 168,
+      "lane": "ship"
+    },
+    {
+      "name": "edge",
+      "focus": "route drift",
+      "signal": 63,
+      "slack": 44,
+      "drag": 27,
+      "confidence": 64,
+      "score": 153,
+      "lane": "ship"
+    },
+    {
+      "name": "recovery",
+      "focus": "secret scope",
+      "signal": 61,
+      "slack": 36,
+      "drag": 14,
+      "confidence": 49,
+      "score": 165,
+      "lane": "ship"
+    },
+    {
+      "name": "stale",
+      "focus": "rollout width",
+      "signal": 68,
+      "slack": 25,
+      "drag": 20,
+      "confidence": 58,
+      "score": 159,
+      "lane": "ship"
+    }
+  ]
+}
