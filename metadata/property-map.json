@@ -1,0 +1,28 @@
+{
+  "repo": "watch-plat-terraform-forge",
+  "language": "Java",
+  "category": "Platform engineering",
+  "goal": "Package a Java local lab for terraform analysis with round-trip fixtures, lossless normalization checks, and documented operating limits.",
+  "weights": {
+    "signal": 2,
+    "slack": 1,
+    "confidence": 2,
+    "drag": 5
+  },
+  "thresholds": {
+    "ship": 192,
+    "watch": 105
+  },
+  "properties": [
+    "raising signal cannot reduce score",
+    "raising drag cannot improve score",
+    "lane labels must match configured thresholds",
+    "golden fixture ids must remain unique"
+  ],
+  "fixture_files": [
+    "fixtures/golden/scoreboard.csv",
+    "fixtures/golden/lane-matrix.csv",
+    "fixtures/fuzz/mutations.csv",
+    "fixtures/fuzz/boundary-cases.jsonl"
+  ]
+}
