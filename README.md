@@ -1,43 +1,68 @@
 # watch-plat-terraform-forge
 
-watch-plat-terraform-forge is a Java project for platform engineering. It focuses on this technical goal: Package a Java local lab for terraform analysis with round-trip fixtures, lossless normalization checks, and documented operating limits.
+`watch-plat-terraform-forge` explores platform engineering in Java. The repository keeps the core rule set compact, then surrounds it with examples that show how the decisions move.
 
-## Why it exists
+## Watch Plat Terraform Forge Notes
 
-Small engineering tools are easiest to trust when their rules are explicit, testable, and cheap to run locally. This repository packages a focused model with fixture data and a local verification path so behavior can be reviewed without external services.
+The quickest review path is the verifier first, then the fixtures, then the operations note. That order makes it easy to see whether the code, data, and explanation still agree.
 
-## Features
+## Why This Exists
 
-- Deterministic policy scoring over fixture scenarios.
-- Clear accept or review decisions based on a documented threshold.
-- A command-line or local test path for quick validation.
-- Golden fixture data for repeatable checks.
-- Minimal dependencies and a compact project layout.
+I use this kind of project to make a rule visible before adding more machinery around it. The important part here is not the size of the codebase. It is that the input signals, scoring rule, fixture data, and expected output can all be checked in one sitting.
 
-## Architecture Notes
+## Implementation Notes
 
-The core module exposes a small scoring API. Inputs are simple numeric signals: demand, capacity, latency, risk, and weight. The score uses a threshold of 169, risk penalty 6, latency penalty 4, and weight bonus 5. Tests exercise the public API against the fixture cases in `fixtures/cases.csv`.
+The core is a scoring model over demand, capacity, latency, risk, and weight. That keeps service shape, route policy, and rollout constraints in one explicit decision path. The threshold is 169, with risk penalty 6, latency penalty 4, and weight bonus 5. The Java implementation uses a compact package layout and direct assertion checks.
 
-## Setup
+## Example Scenarios
 
-Install the Java toolchain and run commands from the repository root.
+`examples/extended_cases.csv` adds six named cases. I kept the names plain so failures are easy to read in a terminal: baseline, pressure, surge, degraded, recovery, and boundary.
 
-## Usage
+## Feature Notes
 
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify.ps1
-```
+- Uses fixture data to keep route policy changes visible in code review.
+- Includes extended examples for rollout constraints, including `surge` and `degraded`.
+- Documents environment checks tradeoffs in `docs/operations.md`.
+- Runs locally with a single verification command and no external credentials.
+- Stores project constants and verification metadata in `metadata/project.json`.
 
-The verification script builds or runs the project and checks the fixture decisions.
+## Local Setup
+
+The only required setup is the local Java toolchain. After cloning, stay in the repo root so fixture paths resolve correctly.
 
 ## Tests
 
 ```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/audit.ps1
+```
+
+The audit command checks repository structure and README constraints before it delegates to the verifier.
+
+## Code Tour
+
+- `src`: primary implementation
+- `tests`: verification harness
+- `fixtures`: compact golden scenarios
+- `examples`: expanded scenario set
+- `metadata`: project constants and verification metadata
+- `docs`: operations and extension notes
+- `scripts`: local verification and audit commands
+
+## Boundaries
+
+This code is local-first. It makes no claim about deployed usage and avoids credentials, hosted state, and environment-specific setup.
+
+## Roadmap
+
+- Add malformed input fixtures so the failure path is as visible as the happy path.
+- Split the scoring constants into a typed configuration object and validate it before use.
+- Add a comparison mode that shows how decisions change when one signal is adjusted.
+- Add one more platform engineering fixture that focuses on a malformed or borderline input.
+
+## Try It
+
+```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify.ps1
 ```
 
-## Limitations And Roadmap
-
-- The fixture set is intentionally small so it can be audited by hand.
-- Future work could add richer domain-specific input adapters.
-- The model is a local demonstration and does not claim production use.
+This runs the language-level build or test path against the compact fixture set.
